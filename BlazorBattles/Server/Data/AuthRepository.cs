@@ -13,17 +13,21 @@ namespace BlazorBattles.Server.Data
         {
             _context = context;
         }
-        public Task<string> Login(string email, string password)
+        public Task<ServiceResponse<string>> Login(string email, string password)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> Register(User user, string password)
+        public async Task<ServiceResponse<int>> Register(User user, string password)
         {
 
-            if(await UserExists(user.Email)) 
+            if (await UserExists(user.Email))
             {
-                
+                return new ServiceResponse<int>
+                {
+                    Success = false,
+                    Message = "User already exists",
+                };
             }
 
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -34,7 +38,11 @@ namespace BlazorBattles.Server.Data
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            return user.Id;
+            return new ServiceResponse<int>
+            {
+                Data = user.Id,
+                Message = "Registration Successful"
+            };
         }
 
         public async Task<bool> UserExists(string email)
