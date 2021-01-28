@@ -6,9 +6,9 @@ Please log in below or <NavLink href="register">register</NavLink> for a new acc
     <DataAnnotationsValidator />
 
     <div class="form-group">
-        <label for="username">Username</label>
-        <InputText id="username" @bind-Value="user.Username" class="form-control" />
-        <ValidationMessage For="@(() => user.Username)" />
+        <label for="username">Email</label>
+        <InputText id="username" @bind-Value="user.Email" class="form-control" />
+        <ValidationMessage For="@(() => user.Email)" />
     </div>
 
     <div class="form-group">
