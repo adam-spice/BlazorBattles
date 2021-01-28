@@ -117,10 +117,16 @@ app {
     color: red;
 }
 
-.top-menu{
+.top-menu {
     justify-content: center;
     width: 100%;
     display: flex;
+}
+
+.army-list {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px;
 }
 
 #blazor-error-ui {

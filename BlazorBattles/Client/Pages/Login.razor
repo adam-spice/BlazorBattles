@@ -1,0 +1,38 @@
+﻿@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
+Please log in below or <NavLink href="register">register</NavLink> for a new account.
+<br />
+<EditForm Model="@user" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control" />
+        <ValidationMessage For="@(() => user.Username)" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
+        <ValidationMessage For="@(() => user.Password)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+    <br />
+    <ValidationSummary />
+</EditForm>
+
+
+
+@code {
+    private BlazorBattles.Shared.UserLogin user = new BlazorBattles.Shared.UserLogin();
+
+
+
+    private async void HandleLogin()
+    {
+        await LocalStorage.SetItemAsync<bool>("isAuthenticated", true);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+    }
+
+}

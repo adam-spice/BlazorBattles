@@ -1,6 +1,8 @@
 ﻿@page "/build"
 @inject BlazorBattles.Client.Services.IBananaService BananaService
 @inject BlazorBattles.Client.Services.IUnitService UnitService
+@inject IToastService ToastService
+@attribute [Authorize]
 
 <h3>Build</h3>
 
@@ -16,14 +18,38 @@
 
 <button @onclick="BuildUnit" class="btn btn-primary">Build</button>
 
+@if (needMoreBananas)
+{
+    <div class="validation-message">
+        Not enough bananas! :(
+    </div>
+}
+
 @code {
     int selectedUnitId = 1;
+
+    bool needMoreBananas = false;
 
     public void BuildUnit()
     {
         BlazorBattles.Shared.Unit selectedUnit =
             UnitService.Units.FirstOrDefault(unit => unit.Id == selectedUnitId);
+
+        if (BananaService.Bananas < selectedUnit.BananaCost)
+        {
+            needMoreBananas = true;
+            ToastService.ShowError("Not enough bananas!", ":(");
+            return;
+        }
+
+        needMoreBananas = false;
+
         BananaService.EatBananas(selectedUnit.BananaCost);
-        UnitService.AddUnits(selectedUnitId);
+        UnitService.AddUnit(selectedUnitId);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UnitService.LoadUnitsAsync();
     }
 }
