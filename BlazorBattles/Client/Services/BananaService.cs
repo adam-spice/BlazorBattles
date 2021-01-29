@@ -17,23 +17,25 @@ namespace BlazorBattles.Client.Services
 
         public event Action OnChnage;
 
-        public void AddBananas(int amount)
+        public async Task AddBananas(int amount)
         {
-            Bananas += amount;
-            BananasChnaged();
-        }
 
+            Bananas += amount; var result = await _http.PutAsJsonAsync<int>("api/User/AddBananas", amount);
+            Bananas = await result.Content.ReadFromJsonAsync<int>();
+            BananasChanged();
+
+        }
         public void EatBananas(int amount)
         {
             Bananas -= amount;
-            BananasChnaged();
+            BananasChanged();
         }
-        void BananasChnaged() => OnChnage.Invoke();
+        void BananasChanged() => OnChnage.Invoke();
 
         public async Task GetBananas()
         {
             Bananas = await _http.GetFromJsonAsync<int>("api/User/GetBananas");
-            BananasChnaged();
+            BananasChanged();
         }
 
     }
