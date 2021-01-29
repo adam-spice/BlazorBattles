@@ -44,8 +44,13 @@ namespace BlazorBattles.Client.Services
         {
             if (Units.Count == 0)
             {
-                Units = await _http.GetFromJsonAsync<IList<Unit>>("api/unit");
+                Units = await _http.GetFromJsonAsync<IList<Unit>>("api/Unit");
             }
+        }
+
+        public async Task LoadUserUnitsAsync()
+        {
+            MyUnits = await _http.GetFromJsonAsync<IList<UserUnit>>("api/UserUnit");
         }
     }
 }
